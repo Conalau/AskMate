@@ -1,0 +1,123 @@
+.navbar { background-color: #484848; }
+.navbar .navbar-nav .nav-link { color: #fff; }
+.navbar .navbar-nav .nav-link:hover { color: #fbc531; }
+.navbar .navbar-nav .active > .nav-link { color: #fbc531; }
+
+
+body {
+	margin: 0 auto;
+	padding: 0;
+}
+
+.btn1 {
+    box-shadow: 0px 1px 0px 0px #fff6af;
+	background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+	background-color:#ffec64;
+	border-radius:36px;
+	border:4px solid #ffaa22;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:13px;
+	font-weight:bold;
+	padding:2px 15px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee66;
+
+}
+
+.btn1:hover {
+    background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+    background-color: #ffab23;
+	text-decoration: none;
+
+}
+.btn-danger {
+	border-radius:36px;
+}
+
+
+.fiveq{
+    margin-left: 50px;
+}
+
+
+.thead{
+    background-color: #484848;
+    color: white;
+    text-align: center;
+}
+.fas {
+    color: #fbc531;
+    padding-right: 70px;
+}
+
+.upp {
+	color: green;
+	padding: 0;
+}
+
+.downn{
+	color: red;
+	padding:0;
+}
+.highlight {
+    background-color: #fbc531;
+}
+
+.dinline {
+    display: inline-block;
+	margin: 1em;
+}
+
+.sortby {
+	float:right;
+	padding-left: 70em;
+}
+
+.imagem {
+	width: 100%;
+	display: block;
+	height:auto;
+}
+
+.question {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	-webkit-font-smoothing: antialiased;
+	color: #ffffff;
+	outline: none;
+	margin: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	display: block;
+	box-sizing: border-box;
+	margin-bottom: 30px;
+	padding: 20px;
+	border: 1px solid #dedede;
+	background: #FFF;
+	position: relative;
+	background-color: #222429;
+	border-color: rgba(0,0,0,0.10);
+	box-shadow: 0 0 5px rgba(0,0,0,0.10);
+	smargin-top: 0;
+}
+.answer {
+	display: inline-block;
+}
+
+.buttonsans {
+	padding-left: 30px;
+}
+
+.h1s {
+	color: #484848;
+}
+
+.welcome {
+	padding-top:0.5em;
+	display: inline-block;
+	color:white;
+	padding-left: 5em;
+}

@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<div class="jumbotron text-center">
+        <h1>ADD A NEW QUESTION</h1>
+</div>
+    <form action="/add-question-todb" method="POST" enctype="multipart/form-data">
+<table class="table">
+    <thead class="thead-dark" style="width : 100%">
+    <tr><th><h2>Title</h2></th></tr>
+    <tr><th><input type="text" name="title" placeholder="title" ></th></tr>
+    <tr><th><h3 >Your question:</h3> </th></tr>
+    <tr><th><textarea name="message" value="message" rows="15" cols="100" placeholder="Type your question here"></textarea></th></tr>
+
+    <tr>
+        <label for="image">Select image</label>
+        <input id="image" type="file" name="form_question_image">
+    </tr>
+    </thead>
+
+   <tbody><tr><td><button type="submit" class="btn btn-info"> Save </button>    </td></tr></tbody>
+</table>
+    </form>
+
+{% endblock %}
+
+

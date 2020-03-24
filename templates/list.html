@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class = "dinline">
+<a href="/add_question" class="btn1" type = "button">Add Question</a>
+<form method = "GET"  class="sortby">
+        <select name="sort_by"  id="Sorting" required>
+            <option selected value = "sorted_by">Sort By</option>
+            <option value="title" {% if sort_by == 'title' %} selected {% endif %}>Title</option>
+            <option value="message"  {% if sort_by == 'message' %} selected {% endif %}>Message</option>
+            <option value="view_number"  {% if sort_by == 'view_number' %} selected {% endif %}>Number of Views</option>
+            <option value="vote_number"  {% if sort_by == 'vote_number' %} selected {% endif %}>Number of Votes</option>
+        </select>
+        <select name="asc_dsc" required>
+            <option value="asc" {% if asc_dsc == 'asc' %} selected {% endif %}>Ascending</option>
+            <option value="desc" {% if asc_dsc == 'desc' %} selected {% endif %}>Descending</option>
+        </select>
+    <button type="submit" class="btn1">Sort</button>
+</form>
+    </div>
+<br>
+<table class="table">
+    <thead class="thead" style="width : 100%">
+        <tr >
+            <th scope="col">ID</th>
+            <th scope="col">SUBMISSION TIME</th>
+            <th scope="col">VIEW NUMBER</th>
+            <th scope="col">VOTE NUMBER</th>
+            <th scope="col">TITLE</th>
+            <th scope="col">MESSAGE</th>
+            <th scope="col">IMAGE</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for question in questions %}
+        <tr> {% for info in question %}
+                {% if question[info] == question['title'] %}
+            <td> <a href="{{url_for('display_one_question', question_id=question.id )}}"> {{ question['title']}}</a></td>
+                {% elif info == 'image' %}
+            <td class = "imagem">
+                <img src="/static/images/{{ question['image'] }}" style="max-width: 150px;">
+            </td>
+                {% else %}
+            <td>{{ question[info] }}</td>
+                {% endif %}
+             {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

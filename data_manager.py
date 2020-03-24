@@ -1,0 +1,389 @@
+from psycopg2 import sql
+import connection
+import datetime
+
+
+# gets data from sql TABLE
+@connection.connection_handler
+def get_data(cursor, table_name):
+    cursor.execute(sql.SQL("""SELECT * FROM {table};
+                    """).format(table=sql.Identifier(table_name)))
+    data = cursor.fetchall()
+    return data
+
+
+@connection.connection_handler
+def display_latest_five_questions(cursor):
+    cursor.execute("""
+                    SELECT title FROM question
+                    ORDER BY submission_time DESC 
+                    LIMIT 5;
+                    """)
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def search_question_pattern(cursor, pattern):
+    cursor.execute("""
+                        SELECT title FROM question
+                        WHERE LOWER(title) LIKE LOWER(%(pattern)s)
+                        UNION 
+                        SELECT message FROM answer
+                        WHERE LOWER(message) LIKE LOWER(%(pattern)s);
+                        """,
+                   {'pattern': '%' + pattern + '%'})
+    search_results = cursor.fetchall()
+    highlighted_list = []
+    for dictionary in search_results:
+        temp = dictionary['title'].lower().replace(pattern, f'<mark class = "highlight">{pattern}</mark>')
+        highlighted_list.append(temp)
+    return highlighted_list
+
+
+@connection.connection_handler
+def add_questions(cursor, title, message, image=None):
+    submission_time = datetime.datetime.utcnow().isoformat(' ', 'seconds')
+    cursor.execute(""" INSERT INTO question (submission_time, view_number, vote_number,title,message,image)
+                        VALUES ( %(submission_time)s, 0, 0, %(title)s, %(message)s, %(image)s);
+    """,{'submission_time': submission_time,
+         'title': title,
+         'message': message,
+         'image': image})
+
+
+@connection.connection_handler
+def update_question(cursor, question_id, title, message ):
+    
+    cursor.execute(""" UPDATE question
+                       SET title = %(title)s, message = %(message)s
+                       WHERE id = %(question_id)s;
+    """,
+                   {'title': title,
+                    'message': message,
+                    'question_id': question_id})
+
+@connection.connection_handler
+def delete_from_table(cursor,question_id):
+    cursor.execute(""" DELETE FROM comment 
+        WHERE  question_id = %(question_id)s;                   
+            """, {'question_id': question_id})
+
+    cursor.execute(""" DELETE FROM answer
+                           WHERE  question_id = %(question_id)s;                      
+            """, {'question_id': question_id})
+
+    cursor.execute(""" DELETE FROM question_tag
+                           WHERE  question_id = %(question_id)s;                      
+        """, {'question_id': question_id})
+
+    cursor.execute(""" DELETE FROM question
+                       WHERE  id = %(question_id)s;                      
+    """, {'question_id': question_id})
+
+
+@connection.connection_handler
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                        DELETE FROM comment
+                        WHERE answer_id = %(answer_id)s;
+        """, {'answer_id': answer_id})
+    cursor.execute("""
+                    DELETE FROM answer
+                    WHERE id = %(answer_id)s;
+    """,{'answer_id': answer_id})
+
+
+@connection.connection_handler
+def get_answer(cursor, answer_id):
+    cursor.execute(""" SELECT *
+                       FROM answer 
+                        WHERE id = %(answer_id)s;
+            """, {'answer_id': answer_id})
+    details = cursor.fetchall()
+    return details
+
+@connection.connection_handler
+def get_answers_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM answer WHERE question_id = %(question_id)s ORDER BY vote_number DESC;
+    """,
+                   {'question_id': question_id})
+    answers = cursor.fetchall()
+    return answers
+
+@connection.connection_handler
+def update_answer(cursor,answer_id,message):
+    cursor.execute(""" UPDATE answer
+                           SET  message = %(message)s
+                           WHERE id = %(answer_id)s
+        """,
+                   {'message': message,
+                    'answer_id': answer_id})
+
+@connection.connection_handler
+def post_answer(cursor, question_id, message, image=None):
+    submission_time = datetime.datetime.utcnow().isoformat(' ', 'seconds')
+    cursor.execute("""
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, %(image)s)
+    """,{'submission_time' : submission_time,
+         'question_id': question_id,
+         'message' : message,
+         'image': image})
+
+@connection.connection_handler
+def get_question_id(cursor, answer_id):
+    cursor.execute(""" SELECT * FROM answer
+                        WHERE id = %(answer_id)s
+    """,{'answer_id': answer_id})
+    info_dict = cursor.fetchone()
+    question_id = info_dict['question_id']
+    return question_id
+
+@connection.connection_handler
+def vote_up_question(cursor, question_id):
+    cursor.execute(""" UPDATE question
+                       SET vote_number = vote_number + 1
+                       WHERE id = %(question_id)s;
+    """,
+                   {'question_id': question_id})
+
+@connection.connection_handler
+def vote_down_question(cursor, question_id):
+    cursor.execute(""" UPDATE question
+                       SET vote_number = vote_number - 1
+                       WHERE id = %(question_id)s;
+    """,
+                   {'question_id': question_id})
+
+
+@connection.connection_handler
+def get_tags(cursor, question_id):
+    cursor.execute("""
+    SELECT tag.id,tag.name FROM tag
+     INNER JOIN question_tag ON tag.id = question_tag.tag_id
+     WHERE question_id = %(question_id)s
+    """,
+                   {'question_id': question_id})
+    tags = cursor.fetchall()
+    distinct_tags = list(set([tag['name'] for tag in tags]))
+    return distinct_tags
+
+
+@connection.connection_handler
+def add_new_tag(cursor, tag):
+    cursor.execute("""
+    INSERT INTO tag (name) VALUES ( %(tag)s);""",
+                   {'tag': tag})
+
+
+@connection.connection_handler
+def add_new_tag_id(cursor,question_id):
+    cursor.execute("""
+    SELECT id FROM tag 
+    ORDER BY id DESC
+    LIMIT 1 """)
+    info_tag = cursor.fetchone()
+    tag_ids = info_tag['id']
+    cursor.execute("""
+    INSERT INTO question_tag (question_id, tag_id) VALUES (%(question_id)s, %(tag_id)s) ;""",
+                   {'question_id': question_id,
+                    'tag_id': tag_ids})
+
+    
+    
+@connection.connection_handler
+def vote_up_answer(cursor, answer_id):
+    cursor.execute(""" UPDATE answer
+                       SET vote_number = vote_number + 1
+                       WHERE id = %(answer_id)s;
+    """,
+                   {'answer_id': answer_id})
+
+@connection.connection_handler
+def vote_down_answer(cursor, answer_id):
+    cursor.execute(""" UPDATE answer
+                       SET vote_number = vote_number -1
+                       WHERE id = %(answer_id)s;
+    """,
+                   {'answer_id': answer_id})
+
+
+@connection.connection_handler
+def get_comments(cursor, question_id, answer_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE question_id = %s;
+                   """,
+                   (question_id,)
+                   )
+    cursor.execute("""
+                        SELECT * FROM comment
+                        WHERE answer_id = %s;
+                       """,
+                   (answer_id,)
+                   )
+    comments = cursor.fetchall()
+    return comments
+
+@connection.connection_handler
+def get_answer_data_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %s;
+                   """,
+                   (answer_id,)
+                   )
+    answer_data = cursor.fetchall()
+    return answer_data
+
+@connection.connection_handler
+def get_question_id_from_answer_id(cursor, answer_id):
+    cursor.execute("""
+                    SELECT question.id
+                    FROM question
+                    INNER JOIN answer
+                    ON (question.id=answer.question_id)
+                    WHERE answer.id=%s;
+                    """,
+                   (answer_id,))
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def add_new_question_comment(cursor, question_comment):
+    cursor.execute("""
+                    INSERT INTO comment (id, question_id, message, submission_time, edited_count)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                   (question_comment['id'],
+                    question_comment['question_id'],
+                    question_comment['message'],
+                    question_comment['submission_time'],
+                    question_comment['edited_count'],
+                        )
+                    )
+
+
+@connection.connection_handler
+def add_new_answer_comment(cursor, answer_comment):
+    cursor.execute("""
+                    INSERT INTO comment (id, answer_id, message, submission_time, edited_count)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                   (answer_comment['id'],
+                    answer_comment['answer_id'],
+                    answer_comment['message'],
+                    answer_comment['submission_time'],
+                    answer_comment['edited_count'],
+                        )
+                    )
+
+
+@connection.connection_handler
+def get_comments_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE question_id = %s ORDER BY submission_time ASC;
+                   """,
+                   (question_id,)
+                   )
+    question_comments = cursor.fetchall()
+    return question_comments
+
+
+@connection.connection_handler
+def get_comments_for_answers(cursor, question_id, answer_id_list):
+    if not answer_id_list:
+        answer_id_list.append('0')
+    answer_id_str = ', '.join(answer_id_list)
+
+    cursor.execute(f"""
+                    SELECT * FROM comment
+                    WHERE answer_id = {question_id} or  answer_id IN ({answer_id_str})
+                    ORDER BY submission_time ASC;
+                   """)
+    answers_comments = cursor.fetchall()
+    return answers_comments
+
+
+@connection.connection_handler
+def delete_comment(cursor, comment_id):
+
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE id = %s;
+                   """,
+                   (comment_id,))
+
+
+@connection.connection_handler
+def get_q_and_a_id_from_comment(cursor, comment_id):
+    cursor.execute("""
+                    SELECT question_id,answer_id FROM comment
+                    WHERE id = %s;
+                   """,
+                   (comment_id,)
+                   )
+    question_id = cursor.fetchall()
+    return question_id
+
+
+@connection.connection_handler
+def get_comment(cursor, comment_id):
+    cursor.execute("""
+                    SELECT * FROM comment
+                    WHERE id = %s;
+                   """,
+                   (comment_id,)
+                   )
+    comment = cursor.fetchall()
+    return comment
+
+
+@connection.connection_handler
+def edit_comment(cursor, comment):
+    cursor.execute("""
+                    UPDATE comment
+                    SET message = %s, edited_count = %s
+                    WHERE id = %s;
+                   """,
+                   (comment['message'],
+                    comment['edited_count'],
+                    comment['id'],)
+                   )
+@connection.connection_handler
+def add_user(cursor, user_name, first_name, last_name, email, password):
+    cursor.execute(""" INSERT INTO users ( user_name,first_name, last_name, email, password )
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                   (user_name,first_name,last_name,email,password))
+
+
+@connection.connection_handler
+def get_user(cursor, user_name):
+    cursor.execute(""" SELECT * FROM users
+                      WHERE user_name = %s;
+    """, (user_name,))
+    details = cursor.fetchone()
+    return details
+
+
+@connection.connection_handler
+def get_user_after_id(cursor, id):
+    cursor.execute(""" SELECT id FROM users
+                      WHERE id = %s;
+    """, (id,))
+    details = cursor.fetchall()
+    return details
+
+
+@connection.connection_handler
+def existing_user(cursor, user_name, email):
+    cursor.execute(""" SELECT * FROM users
+                      WHERE user_name = %s OR 
+                      email = %s;
+    """, (user_name, email))
+    details = cursor.fetchall()
+    return details

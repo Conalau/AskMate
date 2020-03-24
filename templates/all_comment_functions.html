@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<style>
+    body {
+        background-image: url(/static/images/question-mark-background-1909040_1920.png);
+    }
+</style>
+
+<br>
+<br>
+<br>
+<div class = "h1s">
+{% if question_id %}
+    <h1>Comment Question</h1>
+{%  endif %}
+{% if answer_id %}
+    <h1>Comment Answer</h1>
+{%  endif %}
+ {% if comment_id %}
+    <h1>Edit comment</h1>
+{%  endif %}
+</div>
+<br>
+{% if question_id and not comment %}
+    <form action="{{ url_for('new_question_comment', question_id=question_id) }}" method="POST">
+            <label for="message">
+                <span class="label-text">Comment:</span>
+            <br>
+            <textarea name="message" id="message" rows="8" cols="70" required></textarea>
+            <br>
+        </label>
+        <br>
+        <button class="btn1" type="submit"> {{ button_title }} </button>
+    </form>
+{%  endif %}
+
+{% if answer_id %}
+    <form action="{{ url_for('new_answer_comment', answer_id=answer_id) }}" method="post">
+        <label for="message">
+            <span class="label-text">Comment:</span>
+            <br>
+            <textarea name="message" id="message" rows="8" cols="70" required></textarea>
+            <br>
+        </label>
+        <br>
+        <button class="btn1" type="submit"> {{ button_title }} </button>
+    </form>
+{%  endif %}
+
+{% if question_id and comment %}
+    <form action="{{ url_for('edit_comment', question_id=question_id, comment_id=comment.id) }}" method="post">
+        <label for="message">
+            <span class="label-text">Comment:</span>
+            <br>
+            <textarea name="message" id="message" rows="8" cols="70" required> {{ comment.message }}</textarea>
+            <br>
+        </label>
+        <br>
+        <button class="btn1" type="submit"> {{ button_title }} </button>
+    </form>
+{%  endif %}
+
+{% endblock %}

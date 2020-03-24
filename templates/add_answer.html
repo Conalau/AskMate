@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron text-center">
+    <h1>ADD A NEW ANSWER</h1>
+</div>
+<form action="{{url_for('question_new_answer', question_id=question['id'])}}" method="POST" enctype="multipart/form-data">
+<table class="table">
+    <thead class="thead style="width : 100%">
+    <tr>
+    <th>
+        <h2>Your answer: </h2>
+        <label for="image">Select image</label>
+        <input id="image" type="file" name="form_answer_image">
+    </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><td><textarea name="text" rows="10" cols="100" placeholder="Type your answer here"></textarea></tr></td>
+
+   <tr> <td><button type="submit" class="btn btn-info"> Save </button>
+    <a href={{url_for('display_one_question', question_id=question['id'])}} type="button" class="btn btn-info">Back To Question</a></td>
+    </tr>
+    </tbody>
+</table>
+</form>
+
+{% endblock %}

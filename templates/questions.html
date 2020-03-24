@@ -1,0 +1,105 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<br>
+<br>
+<br>
+<br>
+
+<article class="question question-type-normal">
+    <div class="tab">
+    <h2>
+        <h1>{{question.title}}</h1>
+    </h2>
+    <div class="question-author">
+        <a href="#" original-title="ahmed" class="question-author-img tooltip-n"><span></span><img alt="" src="https://2code.info/demo/html/ask-me/images/demo/avatar.png"></a>
+    </div>
+    <div class="question-inner">
+        <div class="clearfix"></div>
+        <p class="question-desc">{{question.message}}</p>
+        <div class="question-details">
+            <span>
+                <a href="/question/ {{ question.id }}/vote_up" type="submit" ><i class="fas fa-arrow-up upp"></i></a>
+                <a href="/question/ {{ question.id }}/vote_down" type="submit"><i class="fas fa-arrow-down downn"></i></a>
+                        {{question['vote_number']}}
+                <a class="btn btn-outline-success " href="/question/{{ question_id }}/edit">EDIT</a>
+                <a class="btn btn-outline-success" href="/question/{{ question_id }}/new-comment">COMMENT</a>
+                <a class="btn btn-outline-success" href="/question/{{ question['id'] }}/new_answer" >NEW ANSWER</a>
+                <a class="btn btn-outline-danger" href="/question/{{ question_id }}/delete" >DELETE</a>
+                <a class="btn btn-info" href="/list" type="button" >Back To List</a>
+            </span>
+        </div>
+
+        <br>
+        {% for tag in tags %}
+        <span class="question-tags"><i class="fas fa-tags "> {{tag}} </i></span>
+        {% endfor %}
+        <br>
+        <br>
+        <br>
+        <p>------------------------------------------------------------------------------------------------------------</p>
+        {% for question_comment in question_comments %}
+            <p>-------> {{ question_comment.message }}</p>
+            <a class="btn1" href="{{ url_for('edit_comment', question_id=question.id, comment_id=question_comment.id)}}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{{ url_for('del_comment', comment_id=question_comment.id)}}
+                    "onclick="return confirm('Are you sure to delete this comment?')">Delete</a>
+                <br>Edited count: {{ question_comment.edited_count }}
+        {% endfor %}
+        <br>
+        <br>
+        <br>
+        <span>
+            <form class = "tagz" method = "POST" action = "{{url_for('add_tag', question_id=question['id'])}}">
+            <input   type="text" name="tag" size ="10" width="10" placeholder ="add tag">
+            <button class="btn1 " type="submit">Add TAG</button>
+            </form>
+        </span>
+        </div>
+        <br>
+        <br>
+        {% for answer in answers %}
+    {% if answer['question_id'] == question['id'] %}
+<div class ="answer">
+    <br>
+    <br>
+            <p class="answer">{{ answer['message'] }} </p>
+    <div class="asd"
+                <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
+                    <i class="fas fa-arrow-up upp"></i></a>
+                <a href="/answer/ {{ answer.id }}/vote_down" type="submit">
+                    <i class="fas fa-arrow-down downn"></i></a>
+                     {{answer['vote_number']}}
+
+
+            <a href="/answer/{{ answer['id'] }}/edit" class="btn1  ">EDIT</a>
+            <a href="/answer/{{ answer['id'] }}/new-comment" class="btn1 ">COMMENT</a>
+            <a href="{{ url_for('delete_answer_from_db', answer_id=answer['id']) }}" class="btn btn-danger btn-sm">Delete</a>
+    </div>
+        <br>
+
+    </div>
+            <div class="comments">
+
+                {% for comment in answer_comments %}
+                    {% if comment['answer_id'] == answer['id'] %}
+                        <ul> -----> {{comment['message']}} <br>
+                            <li>Edited : {{comment['edited_count']}} times</li><br>
+                            <a class="btn1"
+                               href="{{ url_for('edit_comment', question_id=question.id, comment_id=comment.id)}}">Edit</a>
+                            <a class="btn btn-danger btn-sm" href="{{ url_for('del_comment', comment_id=comment.id)}}
+                                "onclick="return confirm('Are you sure to delete this comment?')">Delete</a>
+                        </ul>
+                    {% endif %}
+                {% endfor %}
+        </div>
+    <p> --------------------------------------------------------------------------------------------------------------------------</p>
+</div>
+{%endif%}
+{%endfor%}
+</div>
+    </div>
+
+</article>
+
+    {% endblock %}

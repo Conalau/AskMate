@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<table class="table">
+    <thead class="thead-dark" style="width : 100%">
+    <tbody>
+
+    {% if query %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <thead class="thead">
+    <tr><th> <h1>Search Results for <mark class = "highlight">{{ pattern }}</mark>:</h1> </th></tr>
+        {% if search_results %}
+            {% for result in search_results%}
+    </thead>
+    <tr><td>       <p class="fiveq"><i class="fas fa-angle-double-right"></i>{{ result | safe }}</p> </td></tr>
+            {% endfor %}
+        {% else %}
+    <tr><td>   <p>Database has no questions containing <span id="query_quest">{{ pattern }}</span>!</p> </td></tr>
+        {% endif %}
+    {% else %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <thead class="thead">
+<tr><th>  <h1>Latest Questions </h1></th></tr>
+    </thead>
+        {% for question in questions %}
+    <tr><td>  <p class="fiveq"> <i class="fas fa-angle-double-right"></i>{{ question['title'] }}</p> </td></tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+    </div>
+{% endblock %}
