@@ -1,8 +1,11 @@
 {% extends 'layout.html' %}
 {% block body %}
+<br>
+<br>
+<br>
 
 <table class="table">
-  <thead>
+  <thead class="thead-dark">
     <tr>
       <th scope="col">UserName</th>
       <th scope="col">FirstName</th>
@@ -15,10 +18,10 @@
     <tbody>
     {% for details in data %}
     <tr>
-        <td>{{details.user_name}}</td>
-        <td>{{details.first_name}}</td>
-        <td>{{details.last_name}}</td>
-        <td>{{details.email}}</td>
+        <td style="background-color: lightslategrey">{{details.user_name}}</td>
+        <td style="background-color: white">{{details.first_name}}</td>
+        <td style="background-color: white">{{details.last_name}}</td>
+        <td style="background-color: darkgoldenrod">{{details.email}}</td>
         <td>{{details.reputation}}</td>
         <td>{{details.registration_date}}</td>
     </tr>

@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 {%  import "bootstrap/wtf.html" as wtf %}
 {% block body %}
+<br>
+<br>
+<br>
 <div class="container">
 
   <form class="form-signin" method="POST" action="/signup">
@@ -12,10 +15,16 @@
           {{ wtf.form_field(form.email) }}
           {{ wtf.form_field(form.password) }}
       {% if status == 'user_exist' %}
-        <p class="errorp">Username or password already exist</p>
+         <div class="isa_error"> <i class="fa fa-warning"></i>
+                        UserName or Email already used
+              </div>
         {% elif status == 'user_created' %}
-                    <p class="errorp">User has been created.Please Login</p>
+                     <div class="isa_success"> <i class="fa fa-check"></i>
+                        User Has Been Created. Please Log In
+              </div>
       {%  endif %}
+      <br>
+      <br>
     <button class="btn1 btn-lg" type="submit">Sign Up</button>
   </form>
 

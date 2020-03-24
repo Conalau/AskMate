@@ -23,17 +23,17 @@
                 <a href="/question/ {{ question.id }}/vote_up" type="submit" ><i class="fas fa-arrow-up upp"></i></a>
                 <a href="/question/ {{ question.id }}/vote_down" type="submit"><i class="fas fa-arrow-down downn"></i></a>
                         {{question['vote_number']}}
-                <a class="btn btn-outline-success " href="/question/{{ question_id }}/edit">EDIT</a>
-                <a class="btn btn-outline-success" href="/question/{{ question_id }}/new-comment">COMMENT</a>
-                <a class="btn btn-outline-success" href="/question/{{ question['id'] }}/new_answer" >NEW ANSWER</a>
-                <a class="btn btn-outline-danger" href="/question/{{ question_id }}/delete" >DELETE</a>
-                <a class="btn btn-info" href="/list" type="button" >Back To List</a>
+                <a class="btn1" href="/question/{{ question_id }}/edit">Edit</a>
+                <a class="btn1" href="/question/{{ question_id }}/new-comment">Comment</a>
+                <a class="btn1" href="/question/{{ question['id'] }}/new_answer" >New Answer</a>
+                <a class="btn1" href="/list" type="button" >Back To List</a>
+                <a class="btn btn-danger" href="/question/{{ question_id }}/delete" >DELETE</a>
             </span>
         </div>
 
         <br>
         {% for tag in tags %}
-        <span class="question-tags"><i class="fas fa-tags "> {{tag}} </i></span>
+        <span class="question-tags"><i class="fa fa-tags "> {{tag}} </i></span>
         {% endfor %}
         <br>
         <br>
@@ -64,7 +64,7 @@
     <br>
     <br>
             <p class="answer">{{ answer['message'] }} </p>
-    <div class="asd"
+    <div class="asd">
                 <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
                     <i class="fas fa-arrow-up upp"></i></a>
                 <a href="/answer/ {{ answer.id }}/vote_down" type="submit">
