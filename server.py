@@ -325,6 +325,13 @@ def logout():
     session.clear()
     return redirect(url_for('index'))
 
+@app.route('/users')
+def show_users():
+    data = data_manager.get_all_users()
+    return render_template('users.html', data=data)
+
+
+
 
 if __name__ == "__main__":
     app.run(

@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">UserName</th>
+      <th scope="col">FirstName</th>
+      <th scope="col">LastName</th>
+      <th scope="col">Email</th>
+        <th scope="col">Reputation</th>
+      <th scope="col">Registration Date</th>
+    </tr>
+  </thead>
+    <tbody>
+    {% for details in data %}
+    <tr>
+        <td>{{details.user_name}}</td>
+        <td>{{details.first_name}}</td>
+        <td>{{details.last_name}}</td>
+        <td>{{details.email}}</td>
+        <td>{{details.reputation}}</td>
+        <td>{{details.registration_date}}</td>
+    </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{%endblock%}

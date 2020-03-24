@@ -369,6 +369,12 @@ def get_user(cursor, user_name):
     details = cursor.fetchone()
     return details
 
+@connection.connection_handler
+def get_all_users(cursor):
+    cursor.execute(""" SELECT * FROM users """)
+    details = cursor.fetchall()
+    return details
+
 
 @connection.connection_handler
 def get_user_after_id(cursor, id):
