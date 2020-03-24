@@ -126,7 +126,9 @@ def add_question():
 def add_question_todb():
     title = request.form['title']
     message = request.form['message']
-    data_manager.add_questions(title, message)
+    data = data_manager.get_user_id_from_username(session['username'])
+    user_id = data['id']
+    data_manager.add_questions(title, message,user_id)
     return redirect("/list")
 
 
@@ -152,7 +154,9 @@ def question_new_answer(question_id):
     question_id = int(question_id)
     if request.method == 'POST':
         answer = request.form.get('text')
-        data_manager.post_answer(question_id, answer)
+        data = data_manager.get_user_id_from_username(session['username'])
+        user_id = data['id']
+        data_manager.post_answer(question_id, answer,user_id)
         return redirect('/question/' + str(question_id))
     question = get_question_by_id(question_id)
     return render_template('add_answer.html', question=question)
@@ -215,13 +219,16 @@ def add_tag(question_id):
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
 def new_question_comment(question_id=None):
+    data = data_manager.get_user_id_from_username(session['username'])
+    user_id = data['id']
     if request.method == 'POST':
         question_comment = {
             'id': key_generator(),
             'question_id': question_id,
             'message': request.form.get('message'),
             'submission_time': get_current_datetime(),
-            'edited_count': '0'
+            'edited_count': '0',
+            'user_id': user_id
              }
         data_manager.add_new_question_comment(question_comment)
         return redirect(url_for('display_one_question', question_id=question_id))
@@ -234,13 +241,16 @@ def new_question_comment(question_id=None):
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
 def new_answer_comment(answer_id=None):
+    data = data_manager.get_user_id_from_username(session['username'])
+    user_id = data['id']
     if request.method == 'POST':
         answer_comment = {
             'id': key_generator(),
             'answer_id': answer_id,
             'message': request.form.get('message'),
             'submission_time': get_current_datetime(),
-            'edited_count': '0'
+            'edited_count': '0',
+            'user_id':user_id
              }
         data_manager.add_new_answer_comment(answer_comment)
         question_id = data_manager.get_answer_data_by_answer_id(answer_id)[0]

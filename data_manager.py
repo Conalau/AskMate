@@ -42,14 +42,15 @@ def search_question_pattern(cursor, pattern):
 
 
 @connection.connection_handler
-def add_questions(cursor, title, message, image=None):
+def add_questions(cursor, title, message, user_id , image=None):
     submission_time = datetime.datetime.utcnow().isoformat(' ', 'seconds')
-    cursor.execute(""" INSERT INTO question (submission_time, view_number, vote_number,title,message,image)
-                        VALUES ( %(submission_time)s, 0, 0, %(title)s, %(message)s, %(image)s);
-    """,{'submission_time': submission_time,
+    cursor.execute(""" INSERT INTO question (submission_time, view_number, vote_number,title,message,user_id,image)
+                        VALUES ( %(submission_time)s, 0, 0, %(title)s, %(message)s, %(user_id)s, %(image)s);
+    """, {'submission_time': submission_time,
          'title': title,
          'message': message,
-         'image': image})
+         'user_id':user_id,
+         'image': image,})
 
 
 @connection.connection_handler
@@ -122,14 +123,15 @@ def update_answer(cursor,answer_id,message):
                     'answer_id': answer_id})
 
 @connection.connection_handler
-def post_answer(cursor, question_id, message, image=None):
+def post_answer(cursor, question_id, message, user_id, image=None):
     submission_time = datetime.datetime.utcnow().isoformat(' ', 'seconds')
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, %(image)s)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, user_id, image)
+                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s,%(user_id)s, %(image)s)
     """,{'submission_time' : submission_time,
          'question_id': question_id,
          'message' : message,
+         'user_id': user_id,
          'image': image})
 
 @connection.connection_handler
@@ -254,30 +256,30 @@ def get_question_id_from_answer_id(cursor, answer_id):
 @connection.connection_handler
 def add_new_question_comment(cursor, question_comment):
     cursor.execute("""
-                    INSERT INTO comment (id, question_id, message, submission_time, edited_count)
-                    VALUES (%s, %s, %s, %s, %s)
+                    INSERT INTO comment (id, question_id, message, submission_time, edited_count,user_id)
+                    VALUES (%s, %s, %s, %s, %s,%s)
                     """,
                    (question_comment['id'],
                     question_comment['question_id'],
                     question_comment['message'],
                     question_comment['submission_time'],
                     question_comment['edited_count'],
-                        )
+                    question_comment['user_id'],   )
                     )
 
 
 @connection.connection_handler
 def add_new_answer_comment(cursor, answer_comment):
     cursor.execute("""
-                    INSERT INTO comment (id, answer_id, message, submission_time, edited_count)
-                    VALUES (%s, %s, %s, %s, %s)
+                    INSERT INTO comment (id, answer_id, message, submission_time, edited_count, user_id)
+                    VALUES (%s, %s, %s, %s, %s,%s)
                     """,
                    (answer_comment['id'],
                     answer_comment['answer_id'],
                     answer_comment['message'],
                     answer_comment['submission_time'],
                     answer_comment['edited_count'],
-                        )
+                    answer_comment['user_id'],)
                     )
 
 
@@ -393,3 +395,12 @@ def existing_user(cursor, user_name, email):
     """, (user_name, email))
     details = cursor.fetchall()
     return details
+
+@connection.connection_handler
+def get_user_id_from_username(cursor,username):
+    cursor.execute(""" SELECT id 
+                       FROM users
+                       WHERE user_name = %s;
+    """, (username,))
+    user_id = cursor.fetchone()
+    return user_id

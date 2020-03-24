@@ -7,17 +7,23 @@
 
 
 {% block body %}
+<style>
+    body {
+        background-image: url(/static/images/question-mark-background-1909040_1920.png);
+    }
+</style>
 
-    <h1>ASK MATE</h1>
+<br>
+<br>
 {%for answer in answer%}
 
 
     <div class="main-form">
         <form action="/edit_answer_todb/{{answer['id']}}" method="POST" enctype="multipart/form-data">
-            <label>Edit Answer {{ answer['id'] }}</label><br>
+            <h1>Edit Answer </h1><br>
             <textarea name="message" rows="6" cols="45" class="text_container">{{ answer.message }}</textarea>
             <br>
-            <input type="submit" value="Edit Answer" class="button">
+            <input type="submit" value="Edit Answer" class="btn1">
         </form>
     </div>
 {%endfor%}
