@@ -20,6 +20,20 @@
         <img alt="" src="https://2code.info/demo/html/ask-me/images/demo/avatar.png" height="90em" >
         <p class="question-desc">{{question.message}} <br><br>
             <span>
+                Comments:<br>
+        {% for question_comment in question_comments %}
+          ------>  {{ question_comment.message }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="editqc" href="{{ url_for('edit_comment', question_id=question.id, comment_id=question_comment.id)}}">
+                <i class="fas fa-edit"></i></a>
+                <a class="red" href="{{ url_for('del_comment', comment_id=question_comment.id)}}
+                    "onclick="return confirm('Are you sure to delete this comment?')">
+                    <i class="fa fa-trash-alt"></i></a>
+               <br> Edited count: {{ question_comment.edited_count }}<br>
+        {% endfor %}
+                <br>
+                <br>
+      </span>
+            <span>
                 <a href="/question/ {{ question.id }}/vote_up" type="submit" ><i class="fas fa-arrow-up upp"></i></a>
                 <a href="/question/ {{ question.id }}/vote_down" type="submit"><i class="fas fa-arrow-down downn"></i></a>
                         {{question['vote_number']}}
@@ -33,49 +47,37 @@
 
 
     </div>
-    <div class="question-inner">
-        {% for question_comment in question_comments %}
-            <p>------> {{ question_comment.message }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="editqc" href="{{ url_for('edit_comment', question_id=question.id, comment_id=question_comment.id)}}"><i class="fas fa-edit"></i></a>
-                <a class="red" href="{{ url_for('del_comment', comment_id=question_comment.id)}}
-                    "onclick="return confirm('Are you sure to delete this comment?')"><i class="fa fa-trash-alt"></i></a>
-               <br> Edited count: {{ question_comment.edited_count }}</p>
-        {% endfor %}
-        </div>
+
         <br>
         <br>
          <h4>Answers</h4>
         {% for answer in answers %}
     {% if answer['question_id'] == question['id'] %}
 <div class ="answer">
-
-
+                <p>{{answer['message']}} <br>
                 <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
                     <i class="fas fa-arrow-up upp"></i></a>
                 <a href="/answer/ {{ answer.id }}/vote_down" type="submit">
                     <i class="fas fa-arrow-down downn"></i></a>
-                     {{answer['vote_number']}}
-            <p>{{answer['message']}} <br>
-
+                     {{answer['vote_number']}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a href="/answer/{{ answer['id'] }}/edit" ><i class="fas fa-edit"></i></a>
             <a href="/answer/{{ answer['id'] }}/new-comment" ><i class="fas fa-comment"></i></a>
-            <a href="{{ url_for('delete_answer_from_db', answer_id=answer['id']) }}"><i class="fas fa-trash-alt"></i></a>
+            <a href="{{ url_for('delete_answer_from_db', answer_id=answer['id']) }}"><i class=" red fas fa-trash-alt"></i></a>
     </p>
     </div>
         <br>
 
     </div>
             <div class="comments">
-                    <h4>ANSWER COMMENTS</h4>
                 {% for comment in answer_comments %}
                     {% if comment['answer_id'] == answer['id'] %}
 
-                        <ul> <li> <p>-----> {{comment['message']}}
+                        <ul> <li> <p>-----> {{comment['message']}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                             <a href="{{ url_for('edit_comment', question_id=question.id, comment_id=comment.id)}}">
                                 <i class="fas fa-edit"></i></a>
-                            <a  href="{{ url_for('del_comment', comment_id=comment.id)}}
-                                "onclick="return confirm('Are you sure to delete this comment?')"><i class="fas fa-trash-alt"></i></a>
+                            <a   href="{{ url_for('del_comment', comment_id=comment.id)}}
+                                "onclick="return confirm('Are you sure to delete this comment?')"><i class=" red fas fa-trash-alt"></i></a>
                        </p> </li>
                         </ul>
                     {% endif %}

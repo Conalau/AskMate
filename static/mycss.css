@@ -93,7 +93,7 @@ body {
 .question {
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	-webkit-font-smoothing: antialiased;
-	color: #ffffff;
+	color: white;
 	outline: none;
 	margin: 0;
 	font-size: 100%;
@@ -106,7 +106,7 @@ body {
 	border: 1px solid #dedede;
 	background: #FFF;
 	position: absolute;
-	background-color: #6c6b74;
+	background: linear-gradient(#484848, #2e303e);
 	border-color: rgba(0,0,0,0.10);
 	box-shadow: 0 0 5px rgba(0,0,0,0.10);
 	margin-top: 0;
@@ -128,7 +128,7 @@ body {
 }
 
 .red {
-	color:white;
+	color:#9199be;
 }
 .red:hover{
 	color:white;
