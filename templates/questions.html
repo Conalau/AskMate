@@ -9,15 +9,15 @@
 
 <article class="question question-type-normal">
     <div class="tab">
-    <h2>
-        <h1>{{question.title}}</h1>
-    </h2>
+
+        <h1 class="qtitle">{{question.title}}</h1>
+    <br>
+    <br>
     <div class="question-author">
-        <a href="#" original-title="ahmed" class="question-author-img tooltip-n"><span></span><img alt="" src="https://2code.info/demo/html/ask-me/images/demo/avatar.png"></a>
+        <p class="question-desc">{{question.message}}</p>
+        <img alt="" src="https://2code.info/demo/html/ask-me/images/demo/avatar.png">
     </div>
     <div class="question-inner">
-        <div class="clearfix"></div>
-        <p class="question-desc">{{question.message}}</p>
         <div class="question-details">
             <span>
                 <a href="/question/ {{ question.id }}/vote_up" type="submit" ><i class="fas fa-arrow-up upp"></i></a>

@@ -105,12 +105,15 @@ body {
 	padding: 20px;
 	border: 1px solid #dedede;
 	background: #FFF;
-	position: relative;
-	background-color: #222429;
+	position: absolute;
+	background-color: #6c6b74;
 	border-color: rgba(0,0,0,0.10);
 	box-shadow: 0 0 5px rgba(0,0,0,0.10);
-	smargin-top: 0;
+	margin-top: 0;
+	width: 80%;
+	left: 10%;
 }
+
 .answer {
 	display: inline-block;
 }
@@ -146,3 +149,4 @@ body {
     font-size:2em;
     vertical-align:middle;
 }
+

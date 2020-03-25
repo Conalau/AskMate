@@ -9,24 +9,16 @@
 <br>
 <br>
 <br>
-    <h1>Question ID: {{ question['id'] }}</h1>
-</div>
+
+
 <form action="/edit-question-todb/{{ question['id'] }}" method="POST" enctype="multipart/form-data">
-    <table class="table">
-    <thead class="thead1" style="width : 100%; background-color: white;" >
-    <tr><th><h2>Title</h2></th></tr>
-    <tr><th><textarea type="text" name="title" rows="1" cols="100" >{{question.title}}</textarea></th></tr>
-    <tr><th><h3 >Your question:</h3> </th></tr>
-    <tr><th><textarea name="message" value="message" rows="15" cols="100">{{question.message}}</textarea></th></tr>
-
-    <tr>
-        <td><label for="image">Select image</label>
-            <input id="image" type="file" name="form_question_image"></td>
-    </tr>
-    </thead>
-
-   <tbody><tr><td><button type="submit" class="btn1"> Save </button>    </td></tr></tbody>
-</table>
+    <h2>Title</h2>
+  <textarea type="text" name="title" rows="1" cols="100" >{{question.title}}</textarea>
+    <h3 >Your question:</h3>
+    <textarea name="message" value="message" rows="15" cols="100">{{question.message}}</textarea> <br>
+    <label for="image">Select image</label>
+    <input id="image" type="file" name="form_question_image"> <br>
+   <button type="submit" class="btn1"> Save </button>
     </form>
 
 {% endblock %}
