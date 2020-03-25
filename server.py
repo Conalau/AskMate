@@ -103,13 +103,19 @@ def display_one_question(question_id):
     question_id = int(question_id)
     question = get_question_by_id(question_id)
     answers = data_manager.get_answers_for_question(question_id)
+
     answer_id_list = []
+    user_id = []
     for answer in answers:
         answer_id_list.append(str(answer['id']))
+        user_id.append(str(answer['user_id']))
+
     answer_comment = data_manager.get_comments_for_answers(question_id,answer_id_list)
     question_comments = data_manager.get_comments_for_question(question_id)
     tag = data_manager.get_tags(question_id)
     user = data_manager.get_user_for_question(question_id)
+    answer_users = data_manager.user_for_answer(user_id)
+    print(answer_users)
     if user:
         user_name = user['user_name']
     else:
@@ -121,7 +127,8 @@ def display_one_question(question_id):
                            answer_comments=answer_comment,
                            question_comments=question_comments,
                            tags=tag,
-                           username=user_name)
+                           username=user_name,
+                           answer_users=answer_users)
 
 @app.route('/add_question')
 def add_question():

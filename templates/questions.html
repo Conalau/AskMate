@@ -65,6 +65,11 @@
             <a href="/answer/{{ answer['id'] }}/new-comment" ><i class="fas fa-comment"></i></a>
             <a href="{{ url_for('delete_answer_from_db', answer_id=answer['id']) }}"><i class=" red fas fa-trash-alt"></i></a>
     </p>
+    {% for user in answer_users %}
+        {% if user['id'] == answer['user_id'] %}
+            <small class="byuser"> by {{user['user_name']}}</small>
+     {%endif%}
+    {%endfor%}
     </div>
         <br>
 

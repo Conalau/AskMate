@@ -79,6 +79,10 @@ body {
     padding-top: 30px;
 }
 
+.byuser {
+	float:right;
+}
+
 .sortby {
 	float:right;
 	padding-left: 70em;

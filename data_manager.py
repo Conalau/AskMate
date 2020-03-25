@@ -450,11 +450,25 @@ def get_comments_by_user_id(cursor, user_id):
 
 @connection.connection_handler
 def get_user_for_question(cursor, question_id):
-    cursor.execute("""SELECT user_name FROM users JOIN question ON question.user_id = users.id
+    cursor.execute("""SELECT user_name FROM users 
+                    JOIN question ON question.user_id = users.id
                         WHERE question.id = %(question_id)s ;
                         """, {'question_id': question_id})
     data = cursor.fetchone()
     return data
+
+@connection.connection_handler
+def user_for_answer(cursor, user_ids):
+    if not user_ids:
+        user_ids.append('0')
+    user_id_str = ', '.join(user_ids)
+    cursor.execute(f""" SELECT DISTINCT user_name, users.id
+                        FROM users
+                        JOIN answer ON answer.user_id = users.id
+                        WHERE users.id IN ({user_id_str})
+                        """)
+    users = cursor.fetchall()
+    return users
 
 
 
