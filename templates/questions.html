@@ -21,8 +21,8 @@
         <p class="question-desc">{{question.message}} <br><br>
             <span>
                 Comments:<br>
-        {% for question_comment in question_comments %}
-          ------>  {{ question_comment.message }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 {% for question_comment in question_comments %}
+                ------>  {{ question_comment.message }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <a class="editqc" href="{{ url_for('edit_comment', question_id=question.id, comment_id=question_comment.id)}}">
                 <i class="fas fa-edit"></i></a>
                 <a class="red" href="{{ url_for('del_comment', comment_id=question_comment.id)}}

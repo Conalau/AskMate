@@ -380,7 +380,7 @@ def get_all_users(cursor):
 
 @connection.connection_handler
 def get_user_after_id(cursor, id):
-    cursor.execute(""" SELECT id FROM users
+    cursor.execute(""" SELECT * FROM users
                       WHERE id = %s;
     """, (id,))
     details = cursor.fetchall()

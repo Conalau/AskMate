@@ -2,11 +2,58 @@
 
 {% block body %}
     {% if id_check == True %}
-        <h1>User Activity for: {{ session['username'] }}</h1>
+{% for details in user_details %}
+<div class = "usercontainer">
+    <div class="grid-item">
+<br>
+<br>
+<br>
+<div class="wrapper">
+    <div class="left">
+        <img src="https://2code.info/demo/html/ask-me/images/demo/avatar.png" alt="user" width="100">
+        <h4>{{details.first_name}}  {{details.last_name}}</h4>
+    </div>
+    <div class="right">
+        <div class="info">
+            <h3>Information</h3>
+            <div class="info_data">
+                 <div class="data">
+                    <h4>Email</h4>
+                    <p>{{details.email}}</p>
+                 </div>
+            </div>
+        </div>
 
+      <div class="projects">
+            <h3>Stats</h3>
+            <div class="projects_data">
+                 <div class="data">
+                    <h4>Reputation</h4>
+                    <p>{{details.reputation}}</p>
+                 </div>
+                 <div class="data">
+                   <h4>Most Viewed</h4>
+                    <p>dolor sit amet.</p>
+              </div>
+            </div>
+        </div>
+
+        <div class="social_media">
+            <ul>
+              <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+              <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+              <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+          </ul>
+      </div>
+    </div>
+</div>
+        </div>
+{% endfor %}
+    <div class="grid-item">
         {% if questions_dict_list|length > 0 %}
-        <h2>User Questions:</h2>
-        <table>
+    <br>
+        <h2>Questions:</h2>
+        <table class="table">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -29,8 +76,8 @@
         {% endif %}
 
         {% if answers_dict_list|length > 0 %}
-            <h2>User Answers:</h2>
-            <table>
+            <h2>Answers:</h2>
+            <table class="table">
             <thead>
                 <tr>
                     <th>Message</th>
@@ -42,20 +89,21 @@
                 {% for row in answers_dict_list %}
                 <tr>
                     <td>
-                        {{ row['message'] }}
+                        <div style="display: block;">
+                        {{ row['message'] }}<br>
                             {% if row['accepted'] %}
-                        <i class="fas fa-check-square"></i><br>
-                            <button>
-                            <a href="/unmark/{{ row['id'] }}/{{ session['user_id'] }}" class="linkButtons">
-                                Unmark
+                            <a href="/unmark/{{ row['id'] }}/{{ session['user_id'] }}">
+                                <i class="fa fa-check-square">Unmark</i>
                             </a>
-                        </button>
+                        </div>
+                    </td>
+
                             {% else %}
-                        <button>
-                            <a href="/mark-accepted/{{ row['id'] }}/{{ session['user_id'] }}" class="linkButtons">
-                                Mark as accepted
+
+                            <a href="/mark-accepted/{{ row['id'] }}/{{ session['user_id'] }}">
+                                <i class="far fa-square">Mark as accept</i>
                             </a>
-                        </button>
+
                             {% endif %}
                     </td>
                     <td><img src="/static/images/{{ row['image'] }}" alt="random image"></td>
@@ -69,8 +117,8 @@
         {% endif %}
 
         {% if comments_dict_list|length > 0 %}
-            <h2>User Comments:</h2>
-            <table>
+            <h2>Comments:</h2>
+            <table class="table">
             <thead>
                 <tr>
                     <th>Message</th>
@@ -91,7 +139,8 @@
         {% else %}
             <p>User has no comments.</p>
         {% endif %}
-
+</div>
+    </div>
     {% else %}
         <p class="user_error">You are not authorized to view this user data.</p>
     {% endif %}
