@@ -104,7 +104,7 @@ def display_one_question(question_id):
     question = get_question_by_id(question_id)
     answers = data_manager.get_answers_for_question(question_id)
     answer_id_list = []
-    for answer in answers: 
+    for answer in answers:
         answer_id_list.append(str(answer['id']))
     answer_comment = data_manager.get_comments_for_answers(question_id,answer_id_list)
     question_comments = data_manager.get_comments_for_question(question_id)
@@ -322,6 +322,10 @@ def login():
             if check == True:
                 session['logged_in'] = True
                 session['username'] = username
+
+                temp_dict = data_manager.get_user_id_from_username(username)
+                session['user_id'] = temp_dict['id']
+
                 return redirect(url_for('display_q'))
             elif check == False:
                 return render_template('login.html', status='not_ok')
@@ -341,6 +345,33 @@ def show_users():
     return render_template('users.html', data=data)
 
 
+@app.route('/user/<user_id>')
+@is_logged_in
+def route_user_activity(user_id):
+    id_check = False
+    questions_dict_list = []
+    answers_dict_list = []
+    comments_dict_list = []
+    print(session['user_id'])
+    if int(user_id) == session['user_id']:
+        id_check = True
+        questions_dict_list = data_manager.get_questions_by_user_id(user_id)
+        answers_dict_list = data_manager.get_answers_by_user_id(user_id)
+        comments_dict_list = data_manager.get_comments_by_user_id(user_id)
+    return render_template('user_page.html', id_check=id_check, questions_dict_list=questions_dict_list,
+                           answers_dict_list=answers_dict_list, comments_dict_list=comments_dict_list)
+
+
+@app.route('/mark-accepted/<answer_id>/<user_id>')
+def route_mark_accepted(answer_id, user_id):
+    data_manager.mark_answer_as_accepted(answer_id)
+    return redirect(url_for('route_user_activity', user_id=user_id))
+
+
+@app.route('/unmark/<answer_id>/<user_id>')
+def route_unmark_answer(answer_id, user_id):
+    data_manager.unmark_accepted_answer(answer_id)
+    return redirect(url_for('route_user_activity', user_id=user_id))
 
 
 if __name__ == "__main__":

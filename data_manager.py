@@ -404,3 +404,66 @@ def get_user_id_from_username(cursor,username):
     """, (username,))
     user_id = cursor.fetchone()
     return user_id
+
+
+@connection.connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT id, title, message, image FROM question
+                    WHERE user_id = %(user_id)s;
+                    """,
+                   {'user_id': user_id})
+    questions_dict_list = cursor.fetchall()
+    return questions_dict_list
+
+
+@connection.connection_handler
+def get_answers_by_user_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT answer.message, answer.image, answer.question_id, answer.accepted, answer.id, question.title
+                    FROM answer 
+                    JOIN question ON answer.question_id = question.id
+                    WHERE answer.user_id = %(user_id)s;
+                    """,
+                   {'user_id': user_id})
+    answers_dict_list = cursor.fetchall()
+    return answers_dict_list
+
+
+@connection.connection_handler
+def get_comments_by_user_id(cursor, user_id):
+    cursor.execute("""
+                    SELECT answer.message AS ans_mes, question.id, question.title, comment.message
+                    FROM answer 
+                    JOIN question ON answer.question_id = question.id
+                    JOIN comment ON answer.id = comment.answer_id
+                    WHERE comment.user_id = %(user_id)s
+                    UNION
+                    SELECT null, question.id, question.title, comment.message
+                    FROM question 
+                    JOIN comment ON question.id = comment.question_id
+                    WHERE comment.user_id = %(user_id)s;
+                    """,
+                   {'user_id': user_id})
+    comments_dict_list = cursor.fetchall()
+    return comments_dict_list
+
+
+@connection.connection_handler
+def mark_answer_as_accepted(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer 
+                    SET accepted = TRUE 
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+
+
+@connection.connection_handler
+def unmark_accepted_answer(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer 
+                    SET accepted = FALSE 
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
