@@ -309,6 +309,7 @@ def signup():
                 return render_template('signup.html', form=form, status='user_exist')
     return render_template('signup.html', form=form)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == "POST":
@@ -322,10 +323,8 @@ def login():
             if check == True:
                 session['logged_in'] = True
                 session['username'] = username
-
                 temp_dict = data_manager.get_user_id_from_username(username)
                 session['user_id'] = temp_dict['id']
-
                 return redirect(url_for('display_q'))
             elif check == False:
                 return render_template('login.html', status='not_ok')
@@ -352,7 +351,6 @@ def route_user_activity(user_id):
     questions_dict_list = []
     answers_dict_list = []
     comments_dict_list = []
-    print(session['user_id'])
     if int(user_id) == session['user_id']:
         id_check = True
         questions_dict_list = data_manager.get_questions_by_user_id(user_id)

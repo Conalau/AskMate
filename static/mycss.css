@@ -114,6 +114,31 @@ body {
 	left: 10%;
 }
 
+.question-author{
+	display: flex;
+}
+
+.question-desc{
+	padding-left: 2em;
+}
+
+.question-tags{
+	display: inline-block;
+	padding-bottom: 3em;
+}
+
+.red {
+	color:white;
+}
+.red:hover{
+	color:white;
+}
+
+
+.question-inner {
+	display:inline-block;
+	padding-left: 30em;
+}
 .answer {
 	display: inline-block;
 }
@@ -130,9 +155,11 @@ body {
 	padding-top:0.5em;
 	display: inline-block;
 	color:white;
-	padding-left: 5em;
+	padding-left: 1em;
 	padding-right: 3em;
+	display: flex;
 }
+
 
 .isa_error {
     color: #D8000C;

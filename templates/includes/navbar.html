@@ -24,8 +24,8 @@
 					<a class="nav-link" href="/users"><i class="fa fa-users"></i> All Users</a>
 					</li>
 					<li class="nav-item pl-1">
-					<span class="welcome"><i class="fa fa-info-circle fa-fw mr-1"></i>Logged in as :
-                        <a class="nav-link" href="/user/{{ session['user_id'] }}">{{session.username}}</a></span>
+					<span class="nav-link user "><i class="fa fa-info-circle fa-fw mr-1"></i>Logged in as :
+					<li> <a class="nav-link" href="/user/{{ session['user_id'] }}">{{session.username}}</a> </li></span>
 					</li>
 					<li class="nav-item pl-1">
 						<a class="nav-link" href="/logout"><i class="fa fa-sign-out-alt"></i>Logout</a>

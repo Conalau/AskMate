@@ -36,10 +36,12 @@
         <tr> {% for info in question %}
                 {% if question[info] == question['title'] %}
             <td> <a href="{{url_for('display_one_question', question_id=question.id )}}"> {{ question['title']}}</a></td>
-                {% elif info == 'image' %}
+                {% elif question[info] == question['image'] %}
             <td class = "imagem">
                 <img src="/static/images/{{ question['image'] }}" style="max-width: 150px;">
             </td>
+                {% elif question[info] == question['user_id'] %}
+            <td style="display:none" ></td>
                 {% else %}
             <td>{{ question[info] }}</td>
                 {% endif %}
