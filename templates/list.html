@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<div class="containerlist">
 <div class = "dinline">
 <a href="/add_question" class="btn1" type = "button">Add Question</a>
 <form method = "GET"  class="sortby">
@@ -50,4 +51,5 @@
     {% endfor %}
     </tbody>
 </table>
+    </div>
 {% endblock %}

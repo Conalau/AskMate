@@ -11,6 +11,7 @@
     <div class="tab">
 
         <h1 class="qtitle">{{question.title}}</h1>
+        <p><small> by {{username}}</small></p>
         {% for tag in tags %}
         <div class="question-tags"><i class="fa fa-tags "> {{tag}} </i></div>
         {% endfor %}
@@ -54,7 +55,7 @@
         {% for answer in answers %}
     {% if answer['question_id'] == question['id'] %}
 <div class ="answer">
-                <p>{{answer['message']}} <br>
+                <p>{{answer['message']}}<br>
                 <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
                     <i class="fas fa-arrow-up upp"></i></a>
                 <a href="/answer/ {{ answer.id }}/vote_down" type="submit">

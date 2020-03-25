@@ -448,6 +448,15 @@ def get_comments_by_user_id(cursor, user_id):
     comments_dict_list = cursor.fetchall()
     return comments_dict_list
 
+@connection.connection_handler
+def get_user_for_question(cursor, question_id):
+    cursor.execute("""SELECT user_name FROM users JOIN question ON question.user_id = users.id
+                        WHERE question.id = %(question_id)s ;
+                        """, {'question_id': question_id})
+    data = cursor.fetchone()
+    return data
+
+
 
 @connection.connection_handler
 def mark_answer_as_accepted(cursor, answer_id):

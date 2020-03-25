@@ -109,13 +109,19 @@ def display_one_question(question_id):
     answer_comment = data_manager.get_comments_for_answers(question_id,answer_id_list)
     question_comments = data_manager.get_comments_for_question(question_id)
     tag = data_manager.get_tags(question_id)
+    user = data_manager.get_user_for_question(question_id)
+    if user:
+        user_name = user['user_name']
+    else:
+        user_name = 'No User Available'
     return render_template('questions.html',
                            question_id=question_id,
                            question=question,
-                           answers = answers,
+                           answers=answers,
                            answer_comments=answer_comment,
                            question_comments=question_comments,
-                           tags=tag)
+                           tags=tag,
+                           username=user_name)
 
 @app.route('/add_question')
 def add_question():

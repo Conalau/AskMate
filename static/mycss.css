@@ -76,8 +76,7 @@ body {
 }
 
 .dinline {
-    display: inline-block;
-	margin: 1em;
+    padding-top: 30px;
 }
 
 .sortby {
