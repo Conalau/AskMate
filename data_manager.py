@@ -66,8 +66,20 @@ def update_question(cursor, question_id, title, message ):
 
 @connection.connection_handler
 def delete_from_table(cursor,question_id):
+    answers = get_data('answer')
+    print(answers)
+    answer_ids = []
+    for answer in answers:
+        if answer['question_id'] == int(question_id):
+            answer_ids.append(answer['id'])
+    print (answer_ids)
+    for answer_id in answer_ids:
+        cursor.execute(""" DELETE FROM comment
+                            WHERE answer_id = %(answer_id)s
+                            """, {'answer_id': answer_id})
+
     cursor.execute(""" DELETE FROM comment 
-        WHERE  question_id = %(question_id)s;                   
+                          WHERE  question_id = %(question_id)s;                   
             """, {'question_id': question_id})
 
     cursor.execute(""" DELETE FROM answer
