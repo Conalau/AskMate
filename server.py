@@ -423,6 +423,7 @@ def route_user_activity(user_id):
         answers_dict_list = data_manager.get_answers_by_user_id(user_id)
         comments_dict_list = data_manager.get_comments_by_user_id(user_id)
         user_details = data_manager.get_user_after_id(user_id)
+        print(user_details)
     return render_template('user_page.html', id_check=id_check, questions_dict_list=questions_dict_list,
                            answers_dict_list=answers_dict_list, comments_dict_list=comments_dict_list, user_details=user_details)
 
