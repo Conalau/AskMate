@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<table class="table" style="text-align: center">
+            <thead>
+                <tr>
+
+                    <th>TAG</th>
+                    <th>No of questions</th>
+                </tr>
+            </thead>
+                <tbody>
+                {% for tag in tags %}
+                <tr>
+                    <td> {{ tag.name }}</td>
+                    <td>{{ tag.number_of_questions }}</td>
+                </tr>
+                </tbody>
+
+{%endfor%}
+{% endblock %}

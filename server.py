@@ -101,6 +101,7 @@ def display_q():
 
 
 @app.route('/question/<question_id>')
+@is_logged_in
 def display_one_question(question_id):
     question_id = int(question_id)
     question = get_question_by_id(question_id)
@@ -135,13 +136,14 @@ def display_one_question(question_id):
                            answer_users=answer_users)
 
 @app.route('/add_question')
+@is_logged_in
 def add_question():
     return render_template('add_question.html')
 
 
 @app.route('/add-question-todb', methods=['GET', 'POST'])
+@is_logged_in
 def add_question_todb():
-
     title = request.form['title']
     print(title)
     message = request.form['message']
@@ -152,6 +154,7 @@ def add_question_todb():
 
 
 @app.route('/question/<question_id>/edit', methods=['GET','POST'])
+@is_logged_in
 def edit_question(question_id):
     question_id = int(question_id)
     question = get_question_by_id(question_id)
@@ -160,6 +163,7 @@ def edit_question(question_id):
 
 
 @app.route('/edit-question-todb/<question_id>', methods=['GET', 'POST'])
+@is_logged_in
 def edit_question_to_csv(question_id):
     question_id = int(question_id)
     title = request.form['title']
@@ -169,6 +173,7 @@ def edit_question_to_csv(question_id):
 
 
 @app.route('/question/<question_id>/new_answer/', methods=['GET', 'POST'])
+@is_logged_in
 def question_new_answer(question_id):
     question_id = int(question_id)
     if request.method == 'POST':
@@ -182,12 +187,14 @@ def question_new_answer(question_id):
 
 
 @app.route('/answer/<answer_id>/edit')
+@is_logged_in
 def get_answer(answer_id):
     answer = data_manager.get_answer(answer_id)
     return render_template('edit_answer.html', answer=answer)
 
 
 @app.route('/edit_answer_todb/<answer_id>', methods = ['GET', 'POST'])
+@is_logged_in
 def edit_answer(answer_id):
     message = request.form['message']
     data_manager.update_answer(answer_id, message)
@@ -197,17 +204,20 @@ def edit_answer(answer_id):
 
 
 @app.route('/answer/<answer_id>/delete')
+@is_logged_in
 def delete_answer_from_db(answer_id):
     question_id = data_manager.get_question_id(answer_id)
     data_manager.delete_answer(answer_id)
     return redirect(url_for('display_one_question', question_id=question_id))
 
 @app.route('/question/<question_id>/delete')
+@is_logged_in
 def delete_from_db(question_id):
     data_manager.delete_from_table(question_id)
     return redirect('/list')
 
 @app.route('/question/<question_id>/vote_up/', methods=['GET', 'POST'])
+@is_logged_in
 def vote_up(question_id):
     data_manager.vote_up_question(question_id)
     user_id = data_manager.get_question_owner(question_id)
@@ -220,6 +230,7 @@ def vote_up(question_id):
         return redirect(request.referrer)
 
 @app.route('/question/<question_id>/vote_down/', methods=['GET', 'POST'])
+@is_logged_in
 def vote_down(question_id):
     data_manager.vote_down_question(question_id)
     user_id = data_manager.get_question_owner(question_id)
@@ -232,6 +243,7 @@ def vote_down(question_id):
         return redirect(request.referrer)
 
 @app.route('/answer/<answer_id>/vote_up')
+@is_logged_in
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
     user_id = data_manager.get_answer_owner(answer_id)
@@ -244,6 +256,7 @@ def vote_up_answer(answer_id):
         return redirect(request.referrer)
 
 @app.route('/answer/<answer_id>/vote_down')
+@is_logged_in
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     user_id = data_manager.get_answer_owner(answer_id)
@@ -257,6 +270,7 @@ def vote_down_answer(answer_id):
 
 
 @app.route("/question/<question_id>/new-tag", methods=['GET', 'POST'])
+@is_logged_in
 def add_tag(question_id):
     if request.method =='POST':
         tag = request.form.get('tag')
@@ -265,6 +279,7 @@ def add_tag(question_id):
     return redirect(request.referrer)
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+@is_logged_in
 def new_question_comment(question_id=None):
     data = data_manager.get_user_id_from_username(session['username'])
     user_id = data['id']
@@ -287,6 +302,7 @@ def new_question_comment(question_id=None):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
+@is_logged_in
 def new_answer_comment(answer_id=None):
     data = data_manager.get_user_id_from_username(session['username'])
     user_id = data['id']
@@ -309,6 +325,7 @@ def new_answer_comment(answer_id=None):
                            answer_id=answer_id)
 
 @app.route('/comments/<comment_id>/delete', methods=['GET'])
+@is_logged_in
 def del_comment(comment_id):
     q_and_a_id = data_manager.get_q_and_a_id_from_comment(comment_id)
     data_manager.delete_comment(comment_id)
@@ -321,6 +338,7 @@ def del_comment(comment_id):
     return redirect(url_for('display_one_question', question_id=question_id))
 
 @app.route('/<question_id>/comments/<comment_id>/edit', methods=['GET', 'POST'])
+@is_logged_in
 def edit_comment(question_id=None, comment_id=None):
     if request.method == 'POST':
         comment = data_manager.get_comment(comment_id)[0]
@@ -386,6 +404,7 @@ def logout():
     return redirect(url_for('index'))
 
 @app.route('/users')
+@is_logged_in
 def show_users():
     data = data_manager.get_all_users()
     return render_template('users.html', data=data)
@@ -419,6 +438,12 @@ def route_unmark_answer(answer_id, question_id):
     data_manager.unmark_accepted_answer(answer_id)
     return redirect(url_for('display_one_question', question_id=question_id))
 
+
+@app.route('/tags')
+@is_logged_in
+def showtags():
+    tags = data_manager.get_tags()
+    return render_template('tags.html', tags=tags)
 
 if __name__ == "__main__":
     app.run(

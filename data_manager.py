@@ -583,3 +583,14 @@ def get_user_name_after_id(cursor, id):
     """, {'id': id})
     user = cursor.fetchone()['user_name']
     return user
+
+@connection.connection_handler
+def get_tags(cursor):
+    cursor.execute("""
+                SELECT tag.name, COUNT(question_id) as number_of_questions 
+                FROM tag
+                LEFT JOIN question_tag  on tag.id = question_tag.tag_id
+                GROUP BY tag.name
+        """)
+    all_tags = cursor.fetchall()
+    return all_tags
