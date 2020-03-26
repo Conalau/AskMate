@@ -69,16 +69,13 @@
                 <p>{{answer['message']}}<br>
 
                 {% if answer['accepted'] %}
-                    <i class="fas fa-check-square"></i><br>
-                    <button>
-                        <a href="/unmark/{{ answer['id'] }}/{{ question_id }}">Unmark</a>
-                    </button>
+
+                        <a href="/unmark/{{ answer['id'] }}/{{ question_id }}" > <i class="fas fa-square"></i> </a>
                 {% else %}
-                    <button>
-                        <a href="/mark-accepted/{{ answer['id'] }}/{{ question_id }}">
-                            Mark as accepted
+
+                        <a href="/mark-accepted/{{ answer['id'] }}/{{ question_id }}" ><i class="fas fa-check-square"></i>
                         </a>
-                    </button>
+
                 {% endif %}
 
                 <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
