@@ -10,13 +10,15 @@ from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 import passhash as ph
 
+UPLOAD_FOLDER = 'static/images'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 Bootstrap(app)
 app.secret_key = "secretkey"
-# login_manager = LoginManager()
-# login_manager.init_app(app)
-# login_manager.login_view = 'login'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 
 
 class LoginForm(FlaskForm):
@@ -103,6 +105,9 @@ def display_one_question(question_id):
     question_id = int(question_id)
     question = get_question_by_id(question_id)
     answers = data_manager.get_answers_for_question(question_id)
+    temp_count = data_manager.get_count_number(question_id)
+    count = temp_count['view_number']
+    data_manager.update_view_count(count,question_id)
 
     answer_id_list = []
     user_id = []
@@ -137,7 +142,9 @@ def add_question():
 
 @app.route('/add-question-todb', methods=['GET', 'POST'])
 def add_question_todb():
+
     title = request.form['title']
+    print(title)
     message = request.form['message']
     data = data_manager.get_user_id_from_username(session['username'])
     user_id = data['id']

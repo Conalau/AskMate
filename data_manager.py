@@ -65,6 +65,22 @@ def update_question(cursor, question_id, title, message ):
                     'question_id': question_id})
 
 @connection.connection_handler
+def get_count_number(cursor,question_id):
+    cursor.execute(""" SELECT view_number
+                       FROM question 
+                       WHERE id = %(question_id)s;""",
+                       {'question_id': question_id})
+    count = cursor.fetchone()
+    return count
+
+@connection.connection_handler
+def update_view_count(cursor,count, question_id):
+    cursor.execute("""UPDATE question
+                     SET view_number = %(count)s + 1
+                     WHERE id = %(question_id)s;
+    """, {'count': count, 'question_id': question_id})
+
+@connection.connection_handler
 def delete_from_table(cursor,question_id):
     answers = get_data('answer')
     print(answers)
@@ -502,3 +518,27 @@ def unmark_accepted_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id})
+
+@connection.connection_handler
+def select_reputation(cursor, user_id):
+    cursor.execute("""
+                    SELECT reputation
+                    FROM users
+                    WHERE id=%(user_id)s;
+                    """,
+                   {'user_id': user_id}
+                   )
+    reputation = cursor.fetchone()
+    return reputation
+
+
+@connection.connection_handler
+def update_reputation(cursor, data):
+    cursor.execute("""
+                    UPDATE users
+                    SET reputation=%s
+                    WHERE  id = %s ;
+                    """,
+                   (data['reputation'],
+                    data['user_id'])
+                   )
