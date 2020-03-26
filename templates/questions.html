@@ -35,9 +35,19 @@
                 <br>
       </span>
             <span>
+                {%if question.user_id == session['user_id']%}
+                <a href="/question/ {{ question.id }}/vote_up" type="submit" ><i class="fas fa-arrow-up upp"
+                style="display:none;"></i></a>
+
+                <a href="/question/ {{ question.id }}/vote_down" type="submit"><i class="fas fa-arrow-down downn"
+                style="display:none;"></i></a>
+
+                {%else%}
                 <a href="/question/ {{ question.id }}/vote_up" type="submit" ><i class="fas fa-arrow-up upp"></i></a>
+
                 <a href="/question/ {{ question.id }}/vote_down" type="submit"><i class="fas fa-arrow-down downn"></i></a>
-                        {{question['vote_number']}}
+                        Vote Number: {{question['vote_number']}}
+                {%endif %}
                 <a class="btn1" href="/question/{{ question_id }}/edit">Edit</a>
                 <a class="btn1" href="/question/{{ question_id }}/new-comment">Comment</a>
                 <a class="btn1" href="/question/{{ question['id'] }}/new_answer" >New Answer</a>
@@ -55,12 +65,19 @@
         {% for answer in answers %}
     {% if answer['question_id'] == question['id'] %}
 <div class ="answer">
+    {% if answer['user_id'] == session['user_id'] %}
                 <p>{{answer['message']}}<br>
                 <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
+                    <i class="fas fa-arrow-up upp" style="display: none"></i></a>
+                <a href="/answer/ {{ answer.id }}/vote_down" type="submit">
+                    <i class="fas fa-arrow-down downn" style="display: none"></i></a>
+     {%else%}
+               <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
                     <i class="fas fa-arrow-up upp"></i></a>
                 <a href="/answer/ {{ answer.id }}/vote_down" type="submit">
-                    <i class="fas fa-arrow-down downn"></i></a>
+                    <i class="fas fa-arrow-down downn" ></i></a>
                      {{answer['vote_number']}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+     {%endif%}
             <a href="/answer/{{ answer['id'] }}/edit" ><i class="fas fa-edit"></i></a>
             <a href="/answer/{{ answer['id'] }}/new-comment" ><i class="fas fa-comment"></i></a>
             <a href="{{ url_for('delete_answer_from_db', answer_id=answer['id']) }}"><i class=" red fas fa-trash-alt"></i></a>

@@ -533,12 +533,53 @@ def select_reputation(cursor, user_id):
 
 
 @connection.connection_handler
-def update_reputation(cursor, data):
+def edit_reputation(cursor, vote, vote_type, user_name):
+    reputation = 0
+    if vote == -1:
+        reputation = - 2
+    elif vote == 1:
+        if vote_type == 'question':
+            reputation = 5
+        elif vote_type == 'answer':
+            reputation = 10
+
     cursor.execute("""
                     UPDATE users
-                    SET reputation=%s
-                    WHERE  id = %s ;
-                    """,
-                   (data['reputation'],
-                    data['user_id'])
-                   )
+                    SET reputation =
+                    (SELECT reputation  
+                    FROM users 
+                    WHERE user_name = %(user_name)s)+%(reputation)s
+                    WHERE user_name = %(user_name)s;
+
+                    """, {'user_name': user_name, 'reputation': reputation})
+
+@connection.connection_handler
+def get_answer_owner(cursor, answer_id):
+    cursor.execute(""" 
+                    SELECT user_id
+                    FROM answer
+                    WHERE id = %(answer_id)s
+                    """, {'answer_id': answer_id})
+    user_i = cursor.fetchone()['user_id']
+    return user_i
+
+@connection.connection_handler
+def get_question_owner(cursor, question_id):
+    cursor.execute(""" 
+                    SELECT user_id
+                    FROM question
+                    WHERE id = %(question_id)s
+                    """, {'question_id': question_id})
+
+    user_i = cursor.fetchone()['user_id']
+    return user_i
+
+
+@connection.connection_handler
+def get_user_name_after_id(cursor, id):
+    cursor.execute(""" SELECT user_name 
+                       FROM users
+                       WHERE id = %(id)s;
+    """, {'id': id})
+    user = cursor.fetchone()['user_name']
+    return user
