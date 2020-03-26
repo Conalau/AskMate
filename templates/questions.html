@@ -67,6 +67,20 @@
 <div class ="answer">
     {% if answer['user_id'] == session['user_id'] %}
                 <p>{{answer['message']}}<br>
+
+                {% if answer['accepted'] %}
+                    <i class="fas fa-check-square"></i><br>
+                    <button>
+                        <a href="/unmark/{{ answer['id'] }}/{{ question_id }}">Unmark</a>
+                    </button>
+                {% else %}
+                    <button>
+                        <a href="/mark-accepted/{{ answer['id'] }}/{{ question_id }}">
+                            Mark as accepted
+                        </a>
+                    </button>
+                {% endif %}
+
                 <a href="/answer/ {{ answer.id }}/vote_up" type="submit">
                     <i class="fas fa-arrow-up upp" style="display: none"></i></a>
                 <a href="/answer/ {{ answer.id }}/vote_down" type="submit">

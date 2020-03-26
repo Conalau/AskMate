@@ -193,7 +193,7 @@ def get_tags(cursor, question_id):
     cursor.execute("""
     SELECT tag.id,tag.name FROM tag
      INNER JOIN question_tag ON tag.id = question_tag.tag_id
-     WHERE question_id = %(question_id)s
+     WHERE question_tag.question_id = %(question_id)s
     """,
                    {'question_id': question_id})
     tags = cursor.fetchall()

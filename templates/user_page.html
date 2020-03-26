@@ -91,20 +91,11 @@
                     <td>
                         <div style="display: block;">
                         {{ row['message'] }}<br>
+
                             {% if row['accepted'] %}
-                            <a href="/unmark/{{ row['id'] }}/{{ session['user_id'] }}">
-                                <i class="fa fa-check-square">Unmark</i>
-                            </a>
-                        </div>
-                    </td>
-
-                            {% else %}
-
-                            <a href="/mark-accepted/{{ row['id'] }}/{{ session['user_id'] }}">
-                                <i class="far fa-square">Mark as accept</i>
-                            </a>
-
+                        <i class="fas fa-check-square"></i><br>
                             {% endif %}
+
                     </td>
                     <td><img src="/static/images/{{ row['image'] }}" alt="random image"></td>
                     <td><a href="/question/{{ row['question_id'] }}">{{ row['title'] }}</a></td>

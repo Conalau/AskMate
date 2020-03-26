@@ -408,16 +408,16 @@ def route_user_activity(user_id):
                            answers_dict_list=answers_dict_list, comments_dict_list=comments_dict_list, user_details=user_details)
 
 
-@app.route('/mark-accepted/<answer_id>/<user_id>')
-def route_mark_accepted(answer_id, user_id):
+@app.route('/mark-accepted/<answer_id>/<question_id>')
+def route_mark_accepted(answer_id, question_id):
     data_manager.mark_answer_as_accepted(answer_id)
-    return redirect(url_for('route_user_activity', user_id=user_id))
+    return redirect(url_for('display_one_question', question_id=question_id))
 
 
-@app.route('/unmark/<answer_id>/<user_id>')
-def route_unmark_answer(answer_id, user_id):
+@app.route('/unmark/<answer_id>/<question_id>')
+def route_unmark_answer(answer_id, question_id):
     data_manager.unmark_accepted_answer(answer_id)
-    return redirect(url_for('route_user_activity', user_id=user_id))
+    return redirect(url_for('display_one_question', question_id=question_id))
 
 
 if __name__ == "__main__":
