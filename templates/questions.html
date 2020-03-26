@@ -67,7 +67,7 @@
 <div class ="answer">
 
                 <p>{{answer['message']}}<br>
- {% if answer['user_id'] == session['user_id'] %}
+                 {% if answer['user_id'] == session['user_id'] %}
                 {% if answer['accepted'] %}
 
                         <a href="/unmark/{{ answer['id'] }}/{{ question_id }}" > <i class="fas fa-square"></i> </a>
