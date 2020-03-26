@@ -585,7 +585,7 @@ def get_user_name_after_id(cursor, id):
     return user
 
 @connection.connection_handler
-def get_tags(cursor):
+def get_tagz(cursor):
     cursor.execute("""
                 SELECT tag.name, COUNT(question_id) as number_of_questions 
                 FROM tag

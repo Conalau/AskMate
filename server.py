@@ -442,7 +442,7 @@ def route_unmark_answer(answer_id, question_id):
 @app.route('/tags')
 @is_logged_in
 def showtags():
-    tags = data_manager.get_tags()
+    tags = data_manager.get_tagz()
     return render_template('tags.html', tags=tags)
 
 if __name__ == "__main__":
