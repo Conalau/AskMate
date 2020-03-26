@@ -109,13 +109,13 @@ def display_one_question(question_id):
     for answer in answers:
         answer_id_list.append(str(answer['id']))
         user_id.append(str(answer['user_id']))
-
+    while 'None' in user_id:
+        user_id.remove('None')
     answer_comment = data_manager.get_comments_for_answers(question_id,answer_id_list)
     question_comments = data_manager.get_comments_for_question(question_id)
     tag = data_manager.get_tags(question_id)
     user = data_manager.get_user_for_question(question_id)
     answer_users = data_manager.user_for_answer(user_id)
-    print(answer_users)
     if user:
         user_name = user['user_name']
     else:
