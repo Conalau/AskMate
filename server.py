@@ -438,6 +438,13 @@ def route_unmark_answer(answer_id, question_id):
     data_manager.unmark_accepted_answer(answer_id)
     return redirect(url_for('display_one_question', question_id=question_id))
 
+@app.route('/test_page')
+@is_logged_in
+def test_page():
+    user_id = session['user_id']
+    fav_questions = data_manager.fav_questions(user_id)
+    return render_template('test_page.html', fav_questions = fav_questions)
+
 
 @app.route('/tags')
 @is_logged_in

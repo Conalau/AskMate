@@ -594,3 +594,13 @@ def get_tagz(cursor):
         """)
     all_tags = cursor.fetchall()
     return all_tags
+
+@connection.connection_handler
+def fav_questions(cursor, user_id):
+    cursor.execute("""
+                    SELECT title FROM question
+                    JOIN fav_questions ON question.id = fav_questions.question_id
+                    WHERE fav_questions.user_id=%(user_id)s ;
+    """, {'user_id': user_id})
+    question = cursor.fetchall()
+    return question
